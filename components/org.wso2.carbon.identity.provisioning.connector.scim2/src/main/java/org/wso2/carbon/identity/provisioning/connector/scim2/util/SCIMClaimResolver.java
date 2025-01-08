@@ -29,6 +29,8 @@ import org.wso2.charon3.core.attributes.DefaultAttributeFactory;
 import org.wso2.charon3.core.exceptions.BadRequestException;
 import org.wso2.charon3.core.exceptions.CharonException;
 import org.wso2.charon3.core.exceptions.NotFoundException;
+import org.wso2.charon3.core.exceptions.NotImplementedException;
+import org.wso2.charon3.core.extensions.UserManager;
 import org.wso2.charon3.core.objects.AbstractSCIMObject;
 import org.wso2.charon3.core.objects.Group;
 import org.wso2.charon3.core.objects.SCIMObject;
@@ -38,9 +40,9 @@ import org.wso2.charon3.core.schema.SCIMConstants;
 import org.wso2.charon3.core.schema.SCIMResourceSchemaManager;
 import org.wso2.charon3.core.schema.SCIMSchemaDefinitions;
 import org.wso2.charon3.core.schema.ResourceTypeSchema;
-import org.wso2.charon3.core.schema.SCIMAttributeSchema;
 import org.wso2.charon3.core.schema.SCIMDefinitions;
 import org.wso2.charon3.core.utils.AttributeUtil;
+import org.wso2.carbon.identity.scim2.common.impl.IdentitySCIMManager;
 import org.wso2.scim2.util.SCIM2CommonConstants;
 
 import java.util.Map;
@@ -638,7 +640,12 @@ public class SCIMClaimResolver {
         ResourceTypeSchema resourceSchema = null;
         switch (scimObjectType) {
             case 1:
-                resourceSchema = SCIMResourceSchemaManager.getInstance().getUserResourceSchema();
+                try {
+                    UserManager userManager = IdentitySCIMManager.getInstance().getUserManager();
+                    resourceSchema = SCIMResourceSchemaManager.getInstance().getUserResourceSchema(userManager);
+                } catch (CharonException | NotImplementedException | BadRequestException e) {
+                    throw new RuntimeException(e);
+                }
                 break;
             case 2:
                 resourceSchema = SCIMSchemaDefinitions.SCIM_GROUP_SCHEMA;
