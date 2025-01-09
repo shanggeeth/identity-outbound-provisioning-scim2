@@ -190,6 +190,8 @@
 							org.wso2.scim2.*;version="${identity.scim2.client.version}",
 							org.wso2.carbon.identity.scim2.common.impl;
 							version="${identity.inbound.provisioning.scim2.import.version.range}",
+							org.wso2.carbon.identity.scim2.common.utils;
+							version="${identity.inbound.provisioning.scim2.import.version.range}",
 							io.scim2.swagger.client.*;version="${identity.scim2.client.version}"
 						</Import-Package>
 						<Export-Package>

@@ -644,7 +644,8 @@ public class SCIMClaimResolver {
                     UserManager userManager = IdentitySCIMManager.getInstance().getUserManager();
                     resourceSchema = SCIMResourceSchemaManager.getInstance().getUserResourceSchema(userManager);
                 } catch (CharonException | NotImplementedException | BadRequestException e) {
-                    throw new RuntimeException(e);
+                    log.debug("Error in getting user resource schema with user manager.", e);
+                    resourceSchema = SCIMResourceSchemaManager.getInstance().getUserResourceSchema();
                 }
                 break;
             case 2:
